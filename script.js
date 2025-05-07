@@ -304,3 +304,40 @@ const eventModule = (() => {
         handleToggleBookStatus,
     }
 })();
+
+const App = (() => {
+    
+    const sampleBookData = [
+        {title: "The Hobbit", author: "J.R.R Tolkien", pages: 295, isRead: false},
+        {title: "1984", author: "George Orwell", pages: 328, isRead: true},
+        {title: "To Kill a Mockingbird", author: "Harper Lee", pages: 281, isRead: false},
+        {title: "War and Peace", author: "Leo Tolstoy", pages: 1225, isRead: false},
+        {title: "The Catcher in the Rye", author: "J.D. Salinger", pages: 214, isRead: true},
+        {title: "The Lord of the Rings", author: "J.R.R. Tolkien", pages: 1216, isRead: true},
+        {title: "The Alchemist", author: "Paulo Coelho", pages: 208, isRead: false},
+        {title: "Crime and Punishment", author: "Fyodor Dostoevsky", pages: 671, isRead: false},
+    ];
+
+    
+    const addSampleBooks = () => {
+        sampleBookData.forEach((book) => {
+            const {title, author, pages, isRead} = book;
+            const newBookObject = bookModule.createBook(title, author, pages, isRead);
+            libraryModule.addBook(newBookObject);
+            UIModule.displayBook(newBookObject);
+        });
+    }
+
+    return {
+        //add event listeners and display sample books
+        init(){
+            document.addEventListener('DOMContentLoaded', () => {
+                UIModule.setupEventListeners();
+            });
+            addSampleBooks();
+        }
+    }
+})();
+
+//start the App
+App.init();
