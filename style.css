@@ -1,0 +1,41 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    line-height: calc(1ex / 0.32);
+    -webkit-font-smoothing: antialiased;
+}
+
+input, button, textarea, select {
+    font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+}
+
+p {
+    text-wrap: pretty;
+    max-inline-size: 50ch;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+}
+
+body {
+    font-family: Optima, Candara, 'Noto Sans', source-sans-pro, sans-serif;
+    font-size: 1rem;
+    min-height: 100vh;
+    background-color: var(--clr-font-light);
+    color: var(--clr-font-dark);
+}
+
+
+
