@@ -153,11 +153,86 @@ const UIModule = (() => {
         return bookList.querySelector(`[data-id="${id}"]`);
     };
 
+    const removeBook = (id) => {
+        const bookListItem = findBookListItem(id);
+        if(bookListItem){b
+            bookListItem.parentElement.removeChild(bookListItem);
+            return bookListItem;
+        }
+        return null;
+    };
+
+    const openDialog = () => {
+        const dialog = document.querySelector('#add-book-dialog');
+        dialog.showModal();
+    };
+
+    const closeDialog = () => {
+        const dialog = document.querySelector('#add-book-dialog');
+        dialog.close();
+    };
+
+    const getFormData = () => {
+        const form = document.querySelector('#book-form');
+        return {
+            title: document.querySelector('#book-title').value.trim(),
+            author: document.querySelector('#book-author').value.trim(),
+            pages: document.querySelector('#book-pages').value || 0,
+            isRead: document.querySelector('#book-read').checked,
+        }
+    };
+
+    const clearForm = () => {
+        const form = document.querySelector('#book-form');
+        form.reset();
+    }
+
+    const toggleStatus = (id) => {
+        const bookListItem = findBookListItem(id);
+        if(bookListItem){
+            const buttonSpan = bookListItem.querySelector('.status-text');
+            buttonSpan.textContent = (buttonSpan.textContent === 'Mark as unread') ? 'Mark as read' : 'Mark as unread';
+
+            const infoSpan = bookListItem.querySelector('.book-list__status');
+            infoSpan.textContent = (infoSpan.textContent === 'not read yet') ? 'is read' : 'not read yet';
+        }
+    };
+
+    const displayBooks = () => {
+        const books = libraryModule.getBooks();
+        clearBooks();
+        books.forEach((book) => {
+            displayBook(book);
+        });
+    };
+
+    const setupEventListeners = () => {
+        //get elements
+        const addBookButton = document.querySelector('#add-book-btn');
+        const registerBookButton = document.querySelector('#register-book-btn');
+        const clearDialogButton = document.querySelector('#clear-dialog-btn');
+        const cancelDialogButton = document.querySelector('#close-dialog-btn');
+
+        //setup event listeners
+        addBookButton.addEventListener('click', eventModule.handleOpenDialog);
+        registerBookButton.addEventListener('click', eventModule.handleAddBook);
+        clearDialogButton.addEventListener('click', eventModule.handleClearDialog);
+        cancelDialogButton.addEventListener('click', eventModule.handleCloseDialog);
+    }
+
     return{
         displayBook,
         createBookElement,
         findBookListItem,
-        clearBooks
+        clearBooks,
+        removeBook,
+        openDialog,
+        closeDialog,
+        getFormData,
+        clearForm,
+        toggleStatus,
+        displayBooks,
+        setupEventListeners,
     }
 })();
 
