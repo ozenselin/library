@@ -212,13 +212,33 @@ const UIModule = (() => {
         const registerBookButton = document.querySelector('#register-book-btn');
         const clearDialogButton = document.querySelector('#clear-dialog-btn');
         const cancelDialogButton = document.querySelector('#close-dialog-btn');
+        const bookSearchInput = document.querySelector('#book-search');
 
         //setup event listeners
         addBookButton.addEventListener('click', eventModule.handleOpenDialog);
         registerBookButton.addEventListener('click', eventModule.handleAddBook);
         clearDialogButton.addEventListener('click', eventModule.handleClearDialog);
         cancelDialogButton.addEventListener('click', eventModule.handleCloseDialog);
+        //input event fires each time when user presses a new key while writing at the input bar
+        bookSearchInput.addEventListener('input', eventModule.handleSearchBook); 
     }
+
+    const filterBooks = (query) => {
+        const books = libraryModule.getBooks();
+        const bookList = document.querySelector('.book-list');
+
+        clearBooks();
+
+        const filteredBooks = books.filter((book) => {
+            return  book.title.toLowerCase().includes(query.toLowerCase()) || 
+                    book.author.toLowerCase().includes(query.toLowerCase());
+        });
+
+        filteredBooks.forEach((book) => {
+            const newBookElement = createBookElement(book);
+            bookList.appendChild(newBookElement);
+        });
+    };
 
     return{
         displayBook,
@@ -233,6 +253,7 @@ const UIModule = (() => {
         toggleStatus,
         displayBooks,
         setupEventListeners,
+        filterBooks,
     }
 })();
 
@@ -295,6 +316,12 @@ const eventModule = (() => {
         libraryModule.toggleBookStatus(id);
     }
 
+    const handleSearchBook = () => {
+        const searchInput = document.querySelector('#book-search');
+        const query = searchInput.value;
+        UIModule.filterBooks(query);
+    }
+
     return {
         handleOpenDialog,
         handleCloseDialog,
@@ -302,6 +329,7 @@ const eventModule = (() => {
         handleRemoveBook,
         handleClearDialog,
         handleToggleBookStatus,
+        handleSearchBook,
     }
 })();
 
