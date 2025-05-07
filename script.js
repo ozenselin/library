@@ -46,7 +46,7 @@ const libraryModule = (() => {
 
     
     const clearLibrary = () => {
-        books = [];
+        books.length = 0;
     }
 
     const addBook = (book) => {
@@ -66,7 +66,7 @@ const libraryModule = (() => {
     const toggleBookStatus = (id) => {
         const book = getBookById(id);
         if(book){
-            book.toggleStatus;
+            book.toggleStatus();
             return true;
         }
         return false;
@@ -155,7 +155,7 @@ const UIModule = (() => {
 
     const removeBook = (id) => {
         const bookListItem = findBookListItem(id);
-        if(bookListItem){b
+        if(bookListItem){
             bookListItem.parentElement.removeChild(bookListItem);
             return bookListItem;
         }
