@@ -160,3 +160,72 @@ const UIModule = (() => {
         clearBooks
     }
 })();
+
+const eventModule = (() => {
+    const handleOpenDialog = () =>{
+        UIModule.openDialog();
+    }
+
+    const handleCloseDialog = () =>{
+        UIModule.closeDialog();
+    }
+
+    const handleAddBook = (event) => {
+        event.preventDefault();
+        
+        //get the form data (4 prpoerties) and create a book object with prototype methods from it
+        const {title, author, pages, isRead} = UIModule.getFormData();
+        const newBook = bookModule.createBook(title, author, pages, isRead);
+
+        //register it in the books[] list
+        libraryModule.addBook(newBook);
+
+        //display the new book on the screen
+        UIModule.displayBook(newBook);
+
+        UIModule.clearForm();
+        UIModule.closeDialog();
+    }
+
+    const handleRemoveBook = (event) => {
+        const button = event.target;
+
+        //find the id of the book item corresponding to the button clicked:
+        //find the closest book list item to the button clicked
+        const bookListItem = button.closest('li');
+
+        //every book list item has a unique data-id property
+        const id = bookListItem.getAttribute('data-id');
+
+        UIModule.removeBook(id);
+        libraryModule.removeBook(id);
+    }
+
+    const handleClearDialog = () => {
+        UIModule.clearForm();
+    }
+
+    const handleToggleBookStatus = (event) => {
+        //get the button
+        const button = event.target;
+
+        //find the id of the book item corresponding to the button clicked:
+        //find the closest book list item to the button clicked
+        const bookListItem = button.closest('li');
+
+        //every book list item has a unique data-id property
+        const id = bookListItem.getAttribute('data-id');
+
+        UIModule.toggleStatus(id);
+        libraryModule.toggleBookStatus(id);
+    }
+
+    return {
+        handleOpenDialog,
+        handleCloseDialog,
+        handleAddBook,
+        handleRemoveBook,
+        handleClearDialog,
+        handleToggleBookStatus,
+    }
+})();
