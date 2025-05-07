@@ -48,6 +48,23 @@
             </ul>
         </section>
     </main>
+
+    <!-- Add book dialog-->
+    <dialog id="add-book-dialog" class="book-dialog" aria-labelledby="dialog-title">
+        <div class="book-dialog__header">
+            <h2 id="dialog-title" class="book-dialog__title">Add New Book</h2>
+            <button type="button" id="close-dialog-btn" class="book-dialog__close-btn" aria-label="Close dialog">
+                <svg class="icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 -960 960 960" fill="currentColor">
+                    <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </button>
+        </div>
+
+        <form id="book-form" class="book-dialog__form">
+            <!-- Form fields will be added in the next commit -->
+        </form>
+    </dialog>
+    
     <!-- Javascript files -->
     <script src="./script.js"></script>
 </body>
