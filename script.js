@@ -25,3 +25,58 @@ const bookModule = (() => {
         createBook,
     }
 })();
+
+const libraryModule = (() => {
+    
+    const books = [];
+
+    
+    const findBookIndex = (id) => {
+        return books.findIndex(book => book.id === id);
+    }
+
+    
+    const getBookById = (id) => {
+        return books.at(findBookIndex(id));
+    }
+
+    const getBooks = () => {
+        return [...books]
+    }
+
+    
+    const clearLibrary = () => {
+        books = [];
+    }
+
+    const addBook = (book) => {
+        books.push(book);
+        return book;
+    }
+    
+    const removeBook = (id) => {
+        const index = findBookIndex(id);
+        if(index !== -1){
+            const removedBook = books.splice(index, 1);
+            return removedBook;
+        }
+        return null;
+    }
+
+    const toggleBookStatus = (id) => {
+        const book = getBookById(id);
+        if(book){
+            book.toggleStatus;
+            return true;
+        }
+        return false;
+    };
+
+    return{
+        getBooks,
+        addBook,
+        removeBook,
+        clearLibrary,
+        toggleBookStatus,
+    }
+})();
