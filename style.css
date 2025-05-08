@@ -205,6 +205,12 @@ body {
     justify-self: end;
 }
 
+.book-list__number {
+    grid-area: counter;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
 input,
 button {
     background-color: transparent;

@@ -120,7 +120,8 @@ const UIModule = (() => {
                             </svg>
                             <span class="visually-hidden status-text">Mark as ${book.isRead ? 'unread' : 'read'}</span>
                         </button>
-                    </div>`;
+                    </div>
+                    <span class="book-list__number">(  )</span>`;
         //create a li
         const newBookElement = document.createElement('li');
 
@@ -133,6 +134,15 @@ const UIModule = (() => {
 
         return newBookElement;
     };
+    
+    const numberBooks = () => {
+        const numberSpans = document.querySelectorAll('.book-list__number');
+        let ctr = 1;
+        numberSpans.forEach(numberSpan => {
+            numberSpan.textContent = `(0${ctr})`;
+            ctr++
+        });
+    }
 
     const displayBook = (book) => {
         const bookList = document.querySelector('.book-list');
@@ -146,6 +156,9 @@ const UIModule = (() => {
         //add event listeners to corresponding buttons
         newBookElement.querySelector('.book-list__toggle-status').addEventListener('click', eventModule.handleToggleBookStatus);
         newBookElement.querySelector('.book-list__remove-btn').addEventListener('click', eventModule.handleRemoveBook);
+
+        //numberBooks
+        numberBooks();
     };
     
     const findBookListItem = (id) => {
@@ -157,6 +170,7 @@ const UIModule = (() => {
         const bookListItem = findBookListItem(id);
         if(bookListItem){
             bookListItem.parentElement.removeChild(bookListItem);
+            numberBooks();
             return bookListItem;
         }
         return null;
@@ -235,8 +249,7 @@ const UIModule = (() => {
         });
 
         filteredBooks.forEach((book) => {
-            const newBookElement = createBookElement(book);
-            bookList.appendChild(newBookElement);
+            displayBook(book);
         });
     };
 
@@ -254,6 +267,7 @@ const UIModule = (() => {
         displayBooks,
         setupEventListeners,
         filterBooks,
+        numberBooks,
     }
 })();
 
@@ -369,3 +383,5 @@ const App = (() => {
 
 //start the App
 App.init();
+
+UIModule.numberBooks();
