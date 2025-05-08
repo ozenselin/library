@@ -144,8 +144,20 @@ body {
     min-width: 45ch;
 }
 
+/* book list belongs to here */
 .library__content {
     grid-area: content;
+    max-height: calc(100vh - 5rem);
+    overflow: scroll;
+}
+
+.book-list__item {
+    list-style-type: none;
+}
+
+/* book-list items are seperated by thin lines */
+.book-list__item:not(:last-child) {
+    border-bottom: 1px solid currentColor;
 }
 
 input,
