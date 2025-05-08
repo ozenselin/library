@@ -153,11 +153,56 @@ body {
 
 .book-list__item {
     list-style-type: none;
+    padding: 1em 2em;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: 
+            "counter info"
+            "actions info";
+    column-gap: 3em;
+    transition: color ease 0.5s,
+                background-color ease 0.5s;
 }
 
 /* book-list items are seperated by thin lines */
 .book-list__item:not(:last-child) {
     border-bottom: 1px solid currentColor;
+}
+
+.book-list__item:hover {
+    background: var(--clr-font-dark);
+    color: var(--clr-font-light);
+}
+
+.book-list__info {
+    grid-area: info;
+}
+
+.book-list__title {
+    font-size: 1.5em;
+}
+
+
+.book-list__actions {
+    grid-area: actions;
+    display: inline;
+}
+
+.book-list__top-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1em;
+}
+
+.book-list__bottom-row {
+    font-style: italic;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.book-list__status {
+    justify-self: end;
 }
 
 input,
