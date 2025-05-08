@@ -69,6 +69,16 @@ body {
 
 .app-hero {
     grid-area: hero;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-hero__title {
+    /* override font-size and family */
+    font-family: Didot, 'Bodoni MT', 'Noto Serif Display', 'URW Palladio L', P052, Sylfaen, serif;
+    font-size: 6em;
 }
 
 .library {
