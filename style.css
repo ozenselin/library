@@ -86,7 +86,16 @@ body {
 }
 
 .app-footer{
+    border-top: 1px solid currentColor;
     grid-area: footer;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
 
