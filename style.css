@@ -56,6 +56,15 @@ body {
 
 .app-header {
     grid-area: header;
+    padding: 0.5em 1em;
+    border-bottom: 1px solid currentColor;
+}
+
+.app-title {
+    /* override font-size */
+    font-size: 0.75em;
+    font-style: italic;
+    font-weight: normal;
 }
 
 .app-hero {
