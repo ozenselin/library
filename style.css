@@ -218,6 +218,12 @@ button {
     padding: 0.25em;
 }
 
+/* action buttons match color of the nearest container: book list item */
+/* this helps to comply when user hover over the list item and switches it's 'background-color' and 'color' */
+.library__content button {
+    color: inherit;
+}
+
 input:hover,
 button:hover {
     color: var(--clr-font-light);
