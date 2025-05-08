@@ -83,6 +83,98 @@ body {
 
 .library {
     grid-area: main;
+    display: grid;
+    grid-template-rows: 2.5rem 1fr;
+    grid-template-areas: 
+            "controls"
+            "content";
+    border-left: 2px solid var(--clr-silver);
+}
+
+.library__controls {
+    grid-area: controls;
+    border-bottom: 1px solid currentColor;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 0.5em 1em;
+    /* buttons should stay in one line in order to avoid breaking layout */
+    white-space: nowrap;
+}
+
+.library__search-container {
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.library__add-button {
+    padding: 0.25em 0.5em;
+    transition: padding ease 0.5s,
+                border-radius ease 0.5s,
+                background-color ease 0.5s;
+}
+
+.library__add-button:hover {
+    border-radius: 1em;
+    padding: 0.25em 1.5em;
+}
+
+.library__search-button {
+    padding: unset;
+    border: unset;
+}
+
+.library__search-button:hover {
+    /* override input, button selectors behavior */
+    all: unset;
+}
+
+.library__search-input {
+    min-width: 25ch;
+    transition: padding ease 1s,
+                border-radius ease 1s,
+                min-width ease 1s,
+                background-color ease 0.5s;
+}
+
+.library__search-input:hover {
+    padding: 0.25em 1em;
+    border-radius: 1em;
+    min-width: 45ch;
+}
+
+.library__content {
+    grid-area: content;
+}
+
+input,
+button {
+    background-color: transparent;
+    border: unset;
+    border-bottom: 1px solid currentColor;
+    border-radius: 0.75em;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.1em;
+    padding: 0.25em;
+}
+
+input:hover,
+button:hover {
+    color: var(--clr-font-light);
+    background: var(--clr-font-dark);
+    border-color: var(--clr-soft-gold);
+}
+
+.visually-hidden {
+    display: none;
+}
+
+
+svg {
+    fill: currentColor;
 }
 
 .app-footer{
@@ -97,6 +189,7 @@ a {
     text-decoration: none;
     color: inherit;
 }
+
 
 
 
