@@ -259,6 +259,108 @@ a {
     color: inherit;
 }
 
+body {
+    position: relative;
+}
+
+.book-dialog {
+    background-color: inherit;
+    position: fixed;
+    width: clamp(15em, 30%, 40em);
+    min-height: 100vh;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 2em;
+    border: unset;
+}
+
+.book-dialog::backdrop {
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.3) 0%,
+        rgba(0, 0, 0, 0.325) 5%,
+        rgba(0, 0, 0, 0.35) 15%,
+        rgba(0, 0, 0, 0.45) 30%,
+        rgba(0, 0, 0, 0.50) 40%,
+        rgba(0, 0, 0, 0.65) 50%,
+        rgba(0, 0, 0, 0.50) 60%,
+        rgba(0, 0, 0, 0.45) 70%,
+        rgba(0, 0, 0, 0.35) 85%,
+        rgba(0, 0, 0, 0.325) 95%,
+        rgba(0, 0, 0, 0.3) 100%
+      );      
+}
+
+.book-dialog__title {
+    font-size: 2em;
+    text-align: center;
+    line-height: 1.1;
+}
+
+.book-dialog__close-btn {
+    /* override button selector */
+    border-radius: 50%;
+    padding: 0.25em;
+}
+
+.book-dialog__header {
+    margin-bottom: 1em;
+}
+
+.book-dialog__close-btn {
+    position: absolute;
+    top: 2em;
+    right: 2em;
+}
+
+.book-dialog__divider {
+    opacity: 0.5;
+    margin: 1em 0;
+}
+
+.book-dialog__button {
+    display: block;
+    width: 100%;
+    margin: 0.5em 0;
+}
+
+.form-field__label {
+    display: block;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.form-field__input {
+    /* override border-radius for input selector */
+    border-radius: 0;
+    border: 1px solid var(--clr-silver);
+    padding-left: 1em;
+    width: 100%;
+    height: 2.5em;
+}
+
+.form-field__label[for="book-read"] {
+    text-transform: unset;
+    display: inline;
+    font-weight: unset;
+}
+
+.form-field__input::placeholder {
+    color: var(--clr-silver);
+    opacity: 1;
+}
+
+.form-field {
+    margin-bottom: 0.5em;
+}
+
+.form-field--checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+}
+
+
 
 
 
