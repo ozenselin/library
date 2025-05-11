@@ -1,61 +1,52 @@
-const bookModule = (() => {
-    const bookPrototype = {
-        getInfo(){
-            return `${this.title} by ${this.author}, ${this.pages} pages, ${this.isRead ? 'is read' : 'not read yet'}}`;
-        },
-        toggleStatus(){
-            this.isRead = !this.isRead;
-            return this.isRead;
-        }
-    }
-    const createBook = (title, author, pages, isRead = false) => {
+class Book {
+    constructor(title, author, pages, isRead = false) {
         const id = Date.now().toString() + Math.random().toString().substring(2,5);
-        const newBook = {
-            id,
-            title,
-            author,
-            pages,
-            isRead,
-        }
-        Object.setPrototypeOf(newBook, bookPrototype);
-        return newBook;
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.isRead = isRead;
     }
 
-    return {
-        createBook,
-    }
-})();
-
-const libraryModule = (() => {
-    
-    const books = [];
-
-    
-    const findBookIndex = (id) => {
-        return books.findIndex(book => book.id === id);
+    getInfo(){
+        return `${this.title} by ${this.author}, ${this.pages} pages, ${this.isRead ? 'is read' : 'not read yet'}}`;
     }
 
-    
-    const getBookById = (id) => {
-        return books.at(findBookIndex(id));
+    toggleStatus(){
+        this.isRead = !this.isRead;
+        return this.isRead;
     }
+}
 
-    const getBooks = () => {
-        return [...books]
+class LibraryModule {
+    static #books = [];
+
+    //helper functions start with #
+    static #findBookIndex(id) {
+        return LibraryModule.#books.findIndex(book => book.id === id);
     }
 
     
-    const clearLibrary = () => {
-        books.length = 0;
+    static #getBookById(id) {
+        return LibraryModule.#books.at(LibraryModule.#findBookIndex(id));
     }
 
-    const addBook = (book) => {
-        books.push(book);
+    static getBooks() {
+        return [...LibraryModule.#books]
+    }
+
+    
+    static clearLibrary() {
+        LibraryModule.#books.length = 0;
+    }
+
+    static addBook(book) {
+        LibraryModule.#books.push(book);
         return book;
     }
     
-    const removeBook = (id) => {
-        const index = findBookIndex(id);
+    static removeBook(id) {
+        const index = LibraryModule.#findBookIndex(id);
         if(index !== -1){
             const removedBook = books.splice(index, 1);
             return removedBook;
@@ -63,32 +54,25 @@ const libraryModule = (() => {
         return null;
     }
 
-    const toggleBookStatus = (id) => {
-        const book = getBookById(id);
+    static toggleBookStatus(id) {
+        const book = LibraryModule.#getBookById(id);
         if(book){
             book.toggleStatus();
             return true;
         }
         return false;
-    };
-
-    return{
-        getBooks,
-        addBook,
-        removeBook,
-        clearLibrary,
-        toggleBookStatus,
     }
-})();
+}
 
-const UIModule = (() => {
+class UIModule {
     
-    const clearBooks = () => {
-        const bookList = document.querySelector('.book-list');
+    //helper functions
+    static #clearBooks() {
+        bookList = document.querySelector('.book-list');
         bookList.innerHTML = '';
     }
     
-    const createBookElement = (book) => {
+    static #createBookElement(book) {
         const innerHTML = `<div class="book-list__info">
                         <div class="book-list__top-row">
                             <span class="book-list__title">${book.title}</span>
@@ -133,9 +117,14 @@ const UIModule = (() => {
         newBookElement.setAttribute('data-id', book.id);
 
         return newBookElement;
-    };
+    }
+
+    static #findBookListItem(id) {
+        const bookList = document.querySelector('.book-list');
+        return bookList.querySelector(`[data-id="${id}"]`);
+    }
     
-    const numberBooks = () => {
+    static numberBooks() {
         const numberSpans = document.querySelectorAll('.book-list__number');
         let ctr = 1;
         numberSpans.forEach(numberSpan => {
@@ -144,49 +133,45 @@ const UIModule = (() => {
         });
     }
 
-    const displayBook = (book) => {
+    static displayBook(book) {
         const bookList = document.querySelector('.book-list');
 
         //create an element (a list item) from the given book object
-        const newBookElement = createBookElement(book);
+        const newBookElement = UIModule.#createBookElement(book);
 
         //display it on the book list
         bookList.appendChild(newBookElement);
 
         //add event listeners to corresponding buttons
-        newBookElement.querySelector('.book-list__toggle-status').addEventListener('click', eventModule.handleToggleBookStatus);
-        newBookElement.querySelector('.book-list__remove-btn').addEventListener('click', eventModule.handleRemoveBook);
+        newBookElement.querySelector('.book-list__toggle-status').addEventListener('click', EventModule.handleToggleBookStatus);
+        newBookElement.querySelector('.book-list__remove-btn').addEventListener('click', EventModule.handleRemoveBook);
 
         //numberBooks
-        numberBooks();
-    };
-    
-    const findBookListItem = (id) => {
-        const bookList = document.querySelector('.book-list');
-        return bookList.querySelector(`[data-id="${id}"]`);
-    };
+        UIModule.numberBooks();
+    }
 
-    const removeBook = (id) => {
-        const bookListItem = findBookListItem(id);
+    static removeBook(id) {
+        const bookListItem = UIModule.#findBookListItem(id);
         if(bookListItem){
             bookListItem.parentElement.removeChild(bookListItem);
-            numberBooks();
+            UIModule.numberBooks();
             return bookListItem;
         }
         return null;
-    };
+    }
 
-    const openDialog = () => {
+    //dialog functions
+    static openDialog() {
         const dialog = document.querySelector('#add-book-dialog');
         dialog.showModal();
-    };
+    }
 
-    const closeDialog = () => {
+    static closeDialog() {
         const dialog = document.querySelector('#add-book-dialog');
         dialog.close();
-    };
+    }
 
-    const getFormData = () => {
+    static getFormData() {
         const form = document.querySelector('#book-form');
         return {
             title: document.querySelector('#book-title').value.trim(),
@@ -194,15 +179,15 @@ const UIModule = (() => {
             pages: document.querySelector('#book-pages').value || 0,
             isRead: document.querySelector('#book-read').checked,
         }
-    };
+    }
 
-    const clearForm = () => {
+    static clearForm() {
         const form = document.querySelector('#book-form');
         form.reset();
     }
 
-    const toggleStatus = (id) => {
-        const bookListItem = findBookListItem(id);
+    static toggleStatus(id) {
+        const bookListItem = UIModule.#findBookListItem(id);
         if(bookListItem){
             const buttonSpan = bookListItem.querySelector('.status-text');
             buttonSpan.textContent = (buttonSpan.textContent === 'Mark as unread') ? 'Mark as read' : 'Mark as unread';
@@ -210,17 +195,17 @@ const UIModule = (() => {
             const infoSpan = bookListItem.querySelector('.book-list__status');
             infoSpan.textContent = (infoSpan.textContent === 'not read yet') ? 'is read' : 'not read yet';
         }
-    };
+    }
 
-    const displayBooks = () => {
-        const books = libraryModule.getBooks();
-        clearBooks();
+    static displayBooks() {
+        const books = LibraryModule.getBooks();
+        UIModule.#clearBooks();
         books.forEach((book) => {
-            displayBook(book);
+            UIModule.displayBook(book);
         });
-    };
+    }
 
-    const setupEventListeners = () => {
+    static setupEventListeners() {
         //get elements
         const addBookButton = document.querySelector('#add-book-btn');
         const registerBookButton = document.querySelector('#register-book-btn');
@@ -229,19 +214,18 @@ const UIModule = (() => {
         const bookSearchInput = document.querySelector('#book-search');
 
         //setup event listeners
-        addBookButton.addEventListener('click', eventModule.handleOpenDialog);
-        registerBookButton.addEventListener('click', eventModule.handleAddBook);
-        clearDialogButton.addEventListener('click', eventModule.handleClearDialog);
-        cancelDialogButton.addEventListener('click', eventModule.handleCloseDialog);
+        addBookButton.addEventListener('click', EventModule.handleOpenDialog);
+        registerBookButton.addEventListener('click', EventModule.handleAddBook);
+        clearDialogButton.addEventListener('click', EventModule.handleClearDialog);
+        cancelDialogButton.addEventListener('click', EventModule.handleCloseDialog);
         //input event fires each time when user presses a new key while writing at the input bar
-        bookSearchInput.addEventListener('input', eventModule.handleSearchBook); 
+        bookSearchInput.addEventListener('input', EventModule.handleSearchBook); 
     }
 
-    const filterBooks = (query) => {
-        const books = libraryModule.getBooks();
-        const bookList = document.querySelector('.book-list');
+    static filterBooks(query) {
+        const books = LibraryModule.getBooks();
 
-        clearBooks();
+        UIModule.#clearBooks();
 
         const filteredBooks = books.filter((book) => {
             return  book.title.toLowerCase().includes(query.toLowerCase()) || 
@@ -249,46 +233,30 @@ const UIModule = (() => {
         });
 
         filteredBooks.forEach((book) => {
-            displayBook(book);
+            UIModule.displayBook(book);
         });
-    };
-
-    return{
-        displayBook,
-        createBookElement,
-        findBookListItem,
-        clearBooks,
-        removeBook,
-        openDialog,
-        closeDialog,
-        getFormData,
-        clearForm,
-        toggleStatus,
-        displayBooks,
-        setupEventListeners,
-        filterBooks,
-        numberBooks,
     }
-})();
 
-const eventModule = (() => {
-    const handleOpenDialog = () =>{
+}
+
+class EventModule {
+    static handleOpenDialog() {
         UIModule.openDialog();
     }
 
-    const handleCloseDialog = () =>{
+    static handleCloseDialog() {
         UIModule.closeDialog();
     }
 
-    const handleAddBook = (event) => {
+    static handleAddBook(event) {
         event.preventDefault();
         
         //get the form data (4 prpoerties) and create a book object with prototype methods from it
         const {title, author, pages, isRead} = UIModule.getFormData();
-        const newBook = bookModule.createBook(title, author, pages, isRead);
+        const newBook = new Book(title, author, pages, isRead);
 
         //register it in the books[] list
-        libraryModule.addBook(newBook);
+        LibraryModule.addBook(newBook);
 
         //display the new book on the screen
         UIModule.displayBook(newBook);
@@ -297,7 +265,7 @@ const eventModule = (() => {
         UIModule.closeDialog();
     }
 
-    const handleRemoveBook = (event) => {
+    static handleRemoveBook(event) {
         const button = event.target;
 
         //find the id of the book item corresponding to the button clicked:
@@ -308,14 +276,14 @@ const eventModule = (() => {
         const id = bookListItem.getAttribute('data-id');
 
         UIModule.removeBook(id);
-        libraryModule.removeBook(id);
+        LibraryModule.removeBook(id);
     }
 
-    const handleClearDialog = () => {
+    static handleClearDialog() {
         UIModule.clearForm();
     }
 
-    const handleToggleBookStatus = (event) => {
+    static handleToggleBookStatus(event) {
         //get the button
         const button = event.target;
 
@@ -327,29 +295,20 @@ const eventModule = (() => {
         const id = bookListItem.getAttribute('data-id');
 
         UIModule.toggleStatus(id);
-        libraryModule.toggleBookStatus(id);
+        LibraryModule.toggleBookStatus(id);
     }
 
-    const handleSearchBook = () => {
+    static handleSearchBook() {
         const searchInput = document.querySelector('#book-search');
         const query = searchInput.value;
         UIModule.filterBooks(query);
     }
 
-    return {
-        handleOpenDialog,
-        handleCloseDialog,
-        handleAddBook,
-        handleRemoveBook,
-        handleClearDialog,
-        handleToggleBookStatus,
-        handleSearchBook,
-    }
-})();
+}
 
-const App = (() => {
+class App {
     
-    const sampleBookData = [
+    static #sampleBookData = [
         {title: "The Hobbit", author: "J.R.R Tolkien", pages: 295, isRead: false},
         {title: "1984", author: "George Orwell", pages: 328, isRead: true},
         {title: "To Kill a Mockingbird", author: "Harper Lee", pages: 281, isRead: false},
@@ -361,27 +320,26 @@ const App = (() => {
     ];
 
     
-    const addSampleBooks = () => {
-        sampleBookData.forEach((book) => {
+    static addSampleBooks() {
+        App.#sampleBookData.forEach((book) => {
             const {title, author, pages, isRead} = book;
-            const newBookObject = bookModule.createBook(title, author, pages, isRead);
-            libraryModule.addBook(newBookObject);
+            const newBookObject = new Book(title, author, pages, isRead);
+            console.log(newBookObject);
+            console.log(newBookObject.getInfo());
+            LibraryModule.addBook(newBookObject);
             UIModule.displayBook(newBookObject);
         });
     }
 
-    return {
-        //add event listeners and display sample books
-        init(){
-            document.addEventListener('DOMContentLoaded', () => {
-                UIModule.setupEventListeners();
-            });
-            addSampleBooks();
-        }
+    
+    static init(){
+        document.addEventListener('DOMContentLoaded', () => {
+            UIModule.setupEventListeners();
+        });
+        App.addSampleBooks();
     }
-})();
+
+}
 
 //start the App
 App.init();
-
-UIModule.numberBooks();
